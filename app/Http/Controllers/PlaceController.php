@@ -10,12 +10,13 @@ class PlaceController extends Controller
     public function getPlaces($city)
     {
         $apiKey = env('FOURSQUARE_API_KEY');
-        $response = Http::get("https://api.foursquare.com/v2/venues/search", [
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => $apiKey,
+        ])->get("https://api.foursquare.com/v3/places/search", [
             'near' => "{$city},JP",
             'limit' => 5,
-            'client_id' => env('FOURSQUARE_CLIENT_ID'),
-            'client_secret' => env('FOURSQUARE_CLIENT_SECRET'),
-            'v' => '20210901'
         ]);
 
         return $response->json();
